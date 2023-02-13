@@ -22,6 +22,6 @@ app.put("/products/:id", updateOneProduct);
 app.delete("/products/:id", deleteOneProduct);
 
 // Start server
-app.listen(5000, () => {
-  console.log("Listening to port 5000...");
+app.listen(process.env.PORT, () => {
+  console.log("Listening to port 5001...");
 });

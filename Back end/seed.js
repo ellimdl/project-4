@@ -1278,15 +1278,6 @@ const orders = [
 const performSeed = async () => {
   const createdProducts = await Product.insertMany(products);
   console.log(`Created ${createdProducts.length} products`);
-
-  const createdUsers = await User.insertMany(users);
-  console.log(`Created ${createdUsers.length} users`);
-
-  const createdCarts = await Cart.insertMany(carts);
-  console.log(`Created ${createdCarts.length} carts`);
-
-  const createdOrders = await Order.insertMany(orders);
-  console.log(`Created ${createdOrders.length} orders`);
 };
 
 // performSeed();
@@ -1298,4 +1289,4 @@ performSeed().then(() => {
 setInterval(() => {
   console.log("Countdown 2s and exit...");
   process.exit(0);
-}, 2000);
+}, 10000);
