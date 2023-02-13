@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CondoList from "../components/CondoList";
 import SearchForm from "../components/SearchForm";
-import results from "../results2";
+// import results from "../results2";
+import axios from "axios";
 
 export default function Home() {
-  const [fullDataSet] = useState(results); // load full dataset
-  const [filtered, setFiltered] = useState(results); // store filtered dataset
+  // const [fullDataSet] = useState(results); // load full dataset
+  // const [filtered, setFiltered] = useState(results); // store filtered dataset
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await axios.get(
+            "http://localhost:5001/products" //api here
+        );
+        console.log(res.data)
+        setProducts(res.data);
+      } catch (err) {
+        setProducts(0)
+      }
+    };
+    getProducts();
+  }, []);
 
   // on submit to filter
   const filterCondo = (searchTerm) => {
@@ -15,17 +33,20 @@ export default function Home() {
     // if "1" received, add "0" in front of it, else return as it is
     searchTerm = searchTerm.length === 1 ? "0" + searchTerm : searchTerm;
 
-    const data = fullDataSet.filter(
+    // const data = fullDataSet.filter(
+    const data = products.filter(
       (element) => element.district === searchTerm
     );
     // console.log("filtered data:", data);
-    setFiltered(data);
+    // setFiltered(data);
+    setProducts(data);
   };
 
   return (
     <main>
       <SearchForm filterCondo={filterCondo} />
-      <CondoList condos={filtered} />
+      {/* <CondoList condos={filtered} /> */}
+      <CondoList condos={products} />
     </main>
   );
 }
