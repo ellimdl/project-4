@@ -1,14 +1,36 @@
-import React from "react";
+// import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 // import Loading from "../components/Loading";
 import { useParams, Link } from "react-router-dom";
-import results from "../results2";
+// import results from "../results2";
 
 export default function SingleCondo() {
   const { project } = useParams();
-  let index = results.findIndex(function (element) {
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await axios.get(
+            "http://localhost:5001/products" //api here
+        );
+        console.log(res.data)
+        setProducts(res.data);
+      } catch (err) {
+        setProducts(0)
+      }
+    };
+    getProducts();
+  }, []);
+
+  // let index = results.findIndex(function (element) {
+  let index = products.findIndex(function (element) {
     return element.project === project;
   });
-  let singleCondoObj = results[index];
+  // let singleCondoObj = results[index];
+  let singleCondoObj = products[index];
 
   return (
     <section className="section card-section">
