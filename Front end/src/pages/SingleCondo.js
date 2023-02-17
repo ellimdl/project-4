@@ -9,6 +9,7 @@ export default function SingleCondo() {
   const { project } = useParams();
 
   const [products, setProducts] = useState([]);
+  const [singleCondoObj, setSingleCondoObj] = useState(null);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -16,8 +17,30 @@ export default function SingleCondo() {
         const res = await axios.get(
             "http://localhost:5001/products" //api here
         );
-        console.log(res.data)
+        console.log(res.data, project)
+        let index = -1;
+
+        for(let i=0 ; i<res.data.length ; i++){
+          if(res.data[i].project === project){
+            index = i;
+            break; // stop looking
+          }
+        }
+
+        setSingleCondoObj(res.data[index]);
         setProducts(res.data);
+
+        // let index = results.findIndex(function (element) {
+          // let index = products.findIndex(function (element) {
+          //   console.log("element:", element, products)
+          //   return element.project === project;
+          // });
+          // // let singleCondoObj = results[index];
+          // setSingleCondoObj((prevState) => {
+            
+          //   return products[index]
+          // });
+          // console.log("singleCondoObj:", singleCondoObj, index);
       } catch (err) {
         setProducts(0)
       }
@@ -25,21 +48,9 @@ export default function SingleCondo() {
     getProducts();
   }, []);
 
-  // let index = results.findIndex(function (element) {
-  let index = products.findIndex(function (element) {
-    return element.project === project;
-  });
-  // let singleCondoObj = results[index];
-  let singleCondoObj = products[index];
-
-  return (
-    <section className="section card-section">
-      <Link to="/" className="btn btn-primary">
-        back home
-      </Link>
-      {/* <h1>{project}</h1> */}
-      <h2 className="section-title">{project}</h2>
-      <div className="card">
+  const DisplayCard = () => {
+    return (
+      <div className="card">        
         <img
           src={
             singleCondoObj.img
@@ -75,6 +86,17 @@ export default function SingleCondo() {
           </p>
         </div>
       </div>
+    )
+  }
+
+  return (
+    <section className="section card-section">
+      <Link to="/" className="btn btn-primary">
+        back home
+      </Link>
+      {/* <h1>{project}</h1> */}
+      <h2 className="section-title">{project}</h2>      
+      {singleCondoObj ? <DisplayCard /> : null}
     </section>
   );
 }
